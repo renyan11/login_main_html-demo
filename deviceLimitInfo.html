@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>设备越限信息主页</title>
+	<link rel="stylesheet" type="text/css" href="css/fenye.css">
+	<!-- 右键菜单css -->
+	<link rel="stylesheet" href="css/rightBtn/bootstrap.min.css">
+	<link rel="stylesheet" href="css/rightBtn/toastr.css">
+	
+	<script src="js/jquery-1.8.0.min.js"></script>
+	<!-- table分页js -->
+	<script src="js/fenye.js"></script>
+	<!-- 右键菜单js -->
+	<script src="js/rightBtn/BootstrapMenu.min.js" type="text/javascript"></script>
+	<script src="js/rightBtn/toastr.js" type="text/javascript"></script>
+	
+</head>
+<body style="margin-top:10px;background-color:transparent;">
+	<table id="cs_table" class="datatable"></table>
+</body>
+
+<script type="text/javascript">
+    var data = [];
+    for(var i=0;i<2270;i++){
+        data[i] = {id:i+1,subname:"220kV南京变"+(i+1),devicename:"#"+(i+1)+"主变-高",yuexiantype:"变压器有功",value:"1"+(i+1)*(i+1)};
+    }
+    var cs = new table({
+        "tableId":"cs_table",    //必须
+        "headers":["序号","厂站名称","设备名称","越限类型","初始值"],   //必须
+        "data":data,        //必须
+        "displayNum": 300,    //必须   默认 10
+        "groupDataNum":10  //可选    默认 10
+    });
+    //右键菜单code
+    var menu = new BootstrapMenu('#cs_table tr', {
+    	  fetchElementData:function($rowElem){     //fetchElementData获取元数据
+    		  	console.info($rowElem);
+            	return $rowElem[0].innerText;
+          },
+          actionsGroups: [  //给右键菜单的选项加一个分组，分割线
+              ['addDescription'],
+              ['editDescription'],
+              ['deleteRow']
+          ],
+          actions: {
+              addDescription: {
+                  name: '<font size=3>功能1</font>',
+                  iconClass: 'fa-plus',
+                  onClick: function(row) {   
+                	  toastr.info(row);
+                  },
+                  isEnabled: function(row) {
+                     return row.isEditable;
+                  }
+              },
+              editDescription: {
+                    name: '<font size=3>功能2</font>',
+                    iconClass: 'fa-edit',
+                    onClick: function(row) {   
+                    	toastr.info(row);
+                    },
+                    isEnabled: function(row) {  
+                        return row.isEditable;
+                    }
+             },
+             deleteRow: {
+                 name: '<font size=3>功能3</font>',
+                 iconClass: 'fa-trash',
+                 onClick: function(row) { 
+                	 toastr.info(row);
+                 },
+                 isEnabled: function(row) {
+                      return row.isEditable && row.isRemovable;
+                 }
+             }
+          }
+	});
+</script>
+</html>
